@@ -2,10 +2,11 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: techdocs-stress-test
+  namespace: default
   description: Stress test de TechDocs
   annotations:
     backstage.io/techdocs-ref: dir:.
 spec:
   type: documentation
   lifecycle: experimental
-  owner: platform
+  owner: group:default/platform

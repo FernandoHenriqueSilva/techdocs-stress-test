@@ -1,0 +1,9 @@
+site_name: TechDocs Stress Test
+site_description: Teste de carga de documentação no Backstage
+site_author: Platform Team
+
+theme:
+  name: material
+
+nav:
+  - Home: index.md
