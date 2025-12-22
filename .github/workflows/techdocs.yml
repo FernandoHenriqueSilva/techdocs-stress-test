@@ -1,0 +1,53 @@
+name: Publish TechDocs Stress Test
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  techdocs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install TechDocs CLI
+        run: npm install -g @techdocs/cli
+
+      - name: Install MkDocs
+        run: pip install mkdocs-techdocs-core
+
+      - name: Generate TechDocs
+        run: |
+          techdocs-cli generate \
+            --source-dir . \
+            --output-dir site
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Upload to Azure Blob Storage
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            az storage blob upload-batch \
+              --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }} \
+              --destination techdocs-stress-test \
+              --source site \
+              --overwrite \
+              --auth-mode login
