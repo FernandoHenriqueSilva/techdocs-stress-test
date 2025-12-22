@@ -4,6 +4,3 @@ site_author: Platform Team
 
 theme:
   name: material
-
-nav:
-  - Home: index.md
